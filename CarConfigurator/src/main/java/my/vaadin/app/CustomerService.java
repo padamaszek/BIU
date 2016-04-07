@@ -25,6 +25,7 @@ public class CustomerService implements Cloneable {
 	private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
 
 	private ArrayList<Customer> contacts = new ArrayList<>();
+	private ArrayList<Customer> car = new ArrayList<>();
 	private long nextId = 0;
 
 	private CustomerService() {
@@ -90,6 +91,13 @@ public class CustomerService implements Cloneable {
 
 	public synchronized List<Customer> getModel(Customer stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
+		car.add(stringFilter);
+		if(stringFilter.getType().equals("Version")){
+			for (Customer contact : car) {
+				arrayList.add(contact);
+			}
+		}
+		
 		for (Customer contact : contacts) {
 			switch (stringFilter.getType()) {
 			case "Car":
@@ -99,6 +107,13 @@ public class CustomerService implements Cloneable {
 				break;
 			case "Model":
 				if (contact.getType().equals("Engine")) {
+					arrayList.add(contact);
+
+				}
+				break;
+				
+			case "Engine":
+				if (contact.getType().equals("Version")) {
 					arrayList.add(contact);
 
 				}
@@ -195,12 +210,16 @@ public class CustomerService implements Cloneable {
 		if (findAll().isEmpty()) {
 			final String[] models = new String[] { "Audi A3", "Audi A4", "Audi A6", "BMW 1", "BMW 5", "BMW 3",
 					"Ford Fiesta", "Ford Focus", "Ford Mustang", "Honda Civic", "Honda Accord", "Mercedes C",
-					"Mercedes E", "Mercedes SLK", "Seat Ibiza", "Seat Leon", "Seat Toledo", "Skoda Octavia", "Skoda Superb", "Skoda Fabia" };
+					"Mercedes E", "Mercedes SLK", "Seat Ibiza", "Seat Leon", "Seat Toledo", "Skoda Octavia",
+					"Skoda Superb", "Skoda Fabia" };
 			final String[] cars = new String[] { "Audi", "BMW", "Ford", "Honda", "Mercedes", "Seat", "Skoda" };
 
 			final String[] engines = new String[] { "Petrol 1.4", "Petrol 1.6", "Petrol 1.8", "Petrol 2.0",
 					"Petrol 3.2", "Diesel 1.7", "Diesel 1.9", "Diesel 2.0" };
-			final String[] version = new String[] { "Audi A4 Avant" };
+			final String[] version = new String[] { "Audi Sportback", "Audi Cabriolet", "Audi Limousine", "BMW Touring", "BMW Limousine", "BMW GranTurismo",
+					"Ford ST", "Ford Hatchback", "Ford RS", "Honda Hatchback", "Honda Kombi", "Mercedes ShootingBreak",
+					"Mercedes AMG", "Mercedes Coupe", "Seat Cupra", "Seat Hatchback5d", "Seat Hatchback3d", "Skoda Liftback",
+					"Skoda Scout", "Skoda Sedan" };
 
 			Random r = new Random(0);
 			for (String name : cars) {
@@ -225,6 +244,15 @@ public class CustomerService implements Cloneable {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
 				c.setType("Engine");
+				c.setName(split[0]);
+				c.setModel(split[1]);
+				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
+				save(c);
+			}
+			for (String name : version) {
+				String[] split = name.split(" ");
+				Customer c = new Customer();
+				c.setType("Version");
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
