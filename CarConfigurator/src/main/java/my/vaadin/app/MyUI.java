@@ -120,7 +120,7 @@ public class MyUI extends UI {
 	public void updateList() {
 		// fetch list of Customers from service and assign it to Grid
 		List<Customer> customers = service.findAll(filterText.getValue());
-		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllItems("car")));
+		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllItems("Car")));
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

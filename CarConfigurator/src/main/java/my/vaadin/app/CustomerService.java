@@ -91,18 +91,18 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> getModel(Customer stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		for (Customer contact : contacts) {
-			switch (contact.getType()) {
-			case "model":
-				if (contact.getName().equals(stringFilter.getName())) {
+			switch (stringFilter.getType()) {
+			case "Car":
+				if (contact.getName().equals(stringFilter.getName()) && contact.getType().equals("Model")) {
 					arrayList.add(contact);
-					
 				}
 				break;
-				/*
-				 * if (contact.getName().equals(stringFilter.getName())&&
-				 * contact.getType().equals("model")) { arrayList.add(contact);
-				 * } }
-				 */
+			case "Model":
+				if (contact.getType().equals("Engine")) {
+					arrayList.add(contact);
+
+				}
+				break;
 			}
 		}
 
@@ -193,22 +193,20 @@ public class CustomerService implements Cloneable {
 	 */
 	public void ensureTestData() {
 		if (findAll().isEmpty()) {
-			final String[] models = new String[] { "Audi A4", "BMW M3", "Chevrolet Corvette", "Fiat Panda",
-					"Ford Mustang", "Honda Civic", "Hyundai Genesis", "Kia Ceed", "Mazda 6", "Mercedes SLK",
-					"Mitsubishi Lancer", "Nissan Note", "Opel Astra", "Peugeot 206", "Renault Clio", "Seat Ibiza",
-					"Skoda Octavia" };
-			final String[] cars = new String[] { "Audi", "BMW", "Chevrolet", "Fiat", "Ford", "Honda", "Hyundai", "Kia",
-					"Mazda", "Mercedes", "Mitsubishi", "Nissan", "Opel", "Peugeot", "Renault", "Seat", "Skoda" };
+			final String[] models = new String[] { "Audi A3", "Audi A4", "Audi A6", "BMW 1", "BMW 5", "BMW 3",
+					"Ford Fiesta", "Ford Focus", "Ford Mustang", "Honda Civic", "Honda Accord", "Mercedes C",
+					"Mercedes E", "Mercedes SLK", "Seat Ibiza", "Seat Leon", "Seat Toledo", "Skoda Octavia", "Skoda Superb", "Skoda Fabia" };
+			final String[] cars = new String[] { "Audi", "BMW", "Ford", "Honda", "Mercedes", "Seat", "Skoda" };
 
 			final String[] engines = new String[] { "Petrol 1.4", "Petrol 1.6", "Petrol 1.8", "Petrol 2.0",
 					"Petrol 3.2", "Diesel 1.7", "Diesel 1.9", "Diesel 2.0" };
-			final String[] parts = new String[] {};
+			final String[] version = new String[] { "Audi A4 Avant" };
 
 			Random r = new Random(0);
 			for (String name : cars) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("car");
+				c.setType("Car");
 				c.setName(split[0]);
 				c.setModel("");
 				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
@@ -217,7 +215,7 @@ public class CustomerService implements Cloneable {
 			for (String name : models) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("model");
+				c.setType("Model");
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
@@ -226,7 +224,7 @@ public class CustomerService implements Cloneable {
 			for (String name : engines) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("engine");
+				c.setType("Engine");
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
