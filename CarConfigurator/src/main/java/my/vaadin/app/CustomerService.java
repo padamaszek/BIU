@@ -92,12 +92,12 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> getModel(Customer stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		car.add(stringFilter);
-		if(stringFilter.getType().equals("Engine")){
+		if (stringFilter.getType().equals("Engine")) {
 			for (Customer contact : car) {
 				arrayList.add(contact);
 			}
 		}
-		
+
 		for (Customer contact : contacts) {
 			switch (stringFilter.getType()) {
 			case "Car":
@@ -106,19 +106,18 @@ public class CustomerService implements Cloneable {
 				}
 				break;
 			case "Model":
-				if (contact.getType().equals("Version")) {
+				if (contact.getName().equals(stringFilter.getName()) && contact.getType().equals("Version")) {
 					arrayList.add(contact);
 
 				}
 				break;
-				
+
 			case "Version":
 				if (contact.getType().equals("Engine")) {
 					arrayList.add(contact);
 				}
 				break;
-			
-			
+
 			}
 		}
 
@@ -209,6 +208,7 @@ public class CustomerService implements Cloneable {
 	 */
 	public void ensureTestData() {
 		if (findAll().isEmpty()) {
+
 			final String[] models = new String[] { "Audi A3", "Audi A4", "Audi A6", "BMW 1", "BMW 5", "BMW 3",
 					"Ford Fiesta", "Ford Focus", "Ford Mustang", "Honda Civic", "Honda Accord", "Mercedes C",
 					"Mercedes E", "Mercedes SLK", "Seat Ibiza", "Seat Leon", "Seat Toledo", "Skoda Octavia",
@@ -217,10 +217,10 @@ public class CustomerService implements Cloneable {
 
 			final String[] engines = new String[] { "Petrol 1.4", "Petrol 1.6", "Petrol 1.8", "Petrol 2.0",
 					"Petrol 3.2", "Diesel 1.7", "Diesel 1.9", "Diesel 2.0" };
-			final String[] version = new String[] { "Audi Sportback", "Audi Cabriolet", "Audi Limousine", "BMW Touring", "BMW Limousine", "BMW GranTurismo",
-					"Ford ST", "Ford Hatchback", "Ford RS", "Honda Hatchback", "Honda Kombi", "Mercedes ShootingBreak",
-					"Mercedes AMG", "Mercedes Coupe", "Seat Cupra", "Seat Hatchback5d", "Seat Hatchback3d", "Skoda Liftback",
-					"Skoda Scout", "Skoda Sedan" };
+			final String[] version = new String[] { "Audi Sportback", "Audi Cabriolet", "Audi Limousine", "BMW Touring",
+					"BMW Limousine", "BMW GranTurismo", "Ford ST", "Ford Hatchback", "Ford RS", "Honda Hatchback",
+					"Honda Kombi", "Mercedes ShootingBreak", "Mercedes AMG", "Mercedes Coupe", "Seat Cupra",
+					"Seat Hatchback5d", "Seat Hatchback3d", "Skoda Liftback", "Skoda Scout", "Skoda Sedan" };
 
 			Random r = new Random(0);
 			for (String name : cars) {

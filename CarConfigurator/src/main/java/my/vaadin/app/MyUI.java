@@ -34,21 +34,18 @@ public class MyUI extends UI {
 	private TextField filterText = new TextField();
 	CustomerForm form = new CustomerForm(this);
 
-
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 
-		Label label = new Label("asdf");
-		
+		Label label = new Label("WITAJ!");
+
 		filterText.setInputPrompt("filter by name...");
 		filterText.addTextChangeListener(e -> {
 			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAll(e.getText())));
 		});
 		filterText.setVisible(false);
-		
-		
-		
+
 		Button clearFilterTextBtn = new Button(FontAwesome.TIMES);
 		clearFilterTextBtn.setDescription("Clear the current filter");
 		clearFilterTextBtn.addClickListener(e -> {
@@ -79,11 +76,31 @@ public class MyUI extends UI {
 
 			updateList();
 		});
+
+				Button signIn = new Button("Sign In");
+				signIn.addClickListener(e -> {
+					label.setValue("Sign In");
+					signIn.setVisible(false);
+					TextField login = new TextField();
+					TextField pwd = new TextField();
+					layout.addComponents(login, pwd);
+					startConfigure.setVisible(false);
+					Button confirmButton = new Button("Confirm");
+					confirmButton.addClickListener(a -> {
+
+						if(login.getValue().equals("admin") && pwd.getValue().equals("admin")){
+							label.setValue("Logged Sucessfully");
+						
+						}
+					});
+					layout.addComponent(confirmButton);
+				});
+
 		
-		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn,startConfigure);
+		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn);
 		toolbar.setSpacing(true);
 
-		grid.setColumns("name", "model","type");
+		grid.setColumns("name", "model", "type");
 
 		HorizontalLayout main = new HorizontalLayout(grid, form);
 		main.setSpacing(true);
@@ -91,7 +108,7 @@ public class MyUI extends UI {
 		grid.setSizeFull();
 		main.setExpandRatio(grid, 1);
 
-		layout.addComponents(label,toolbar, main);
+		layout.addComponents(label, toolbar, main);
 
 		updateList();
 
@@ -101,17 +118,16 @@ public class MyUI extends UI {
 
 		form.setVisible(false);
 
-		//
 		grid.setVisible(false);
+
 		
 		grid.addSelectionListener(event -> {
 			if (event.getSelected().isEmpty()) {
 				form.setVisible(false);
-				
-				
+
 			} else {
 				Customer customer = (Customer) event.getSelected().iterator().next();
-				form.setCustomer(customer);
+				form.setCustomer(customer);	
 				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getModel(customer)));
 			}
 		});
