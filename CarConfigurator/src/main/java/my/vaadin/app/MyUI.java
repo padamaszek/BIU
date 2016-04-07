@@ -111,6 +111,7 @@ public class MyUI extends UI {
 			} else {
 				Customer customer = (Customer) event.getSelected().iterator().next();
 				form.setCustomer(customer);
+				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getModel(customer)));
 			}
 		});
 

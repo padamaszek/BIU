@@ -78,16 +78,37 @@ public class CustomerService implements Cloneable {
 		});
 		return arrayList;
 	}
-	public synchronized List<Customer> findAllItems(String stringFilter) 
-	 {
-	  ArrayList<Customer> arrayList = new ArrayList<>();
-	  for (Customer contact : contacts) 
-	  {
-	   if(contact.getType().equals(stringFilter))
-	    arrayList.add(contact);
-	  }
-	  return arrayList;
-	 }
+
+	public synchronized List<Customer> findAllItems(String stringFilter) {
+		ArrayList<Customer> arrayList = new ArrayList<>();
+		for (Customer contact : contacts) {
+			if (contact.getType().equals(stringFilter))
+				arrayList.add(contact);
+		}
+		return arrayList;
+	}
+
+	public synchronized List<Customer> getModel(Customer stringFilter) {
+		ArrayList<Customer> arrayList = new ArrayList<>();
+		for (Customer contact : contacts) {
+			switch (contact.getType()) {
+			case "model":
+				if (contact.getName().equals(stringFilter.getName())) {
+					arrayList.add(contact);
+					
+				}
+				break;
+				/*
+				 * if (contact.getName().equals(stringFilter.getName())&&
+				 * contact.getType().equals("model")) { arrayList.add(contact);
+				 * } }
+				 */
+			}
+		}
+
+		return arrayList;
+	}
+
 	/**
 	 * Finds all Customer's that match given filter and limits the resultset.
 	 *
@@ -166,15 +187,19 @@ public class CustomerService implements Cloneable {
 		}
 		contacts.add(entry);
 	}
+
 	/**
 	 * Sample data generation
 	 */
 	public void ensureTestData() {
 		if (findAll().isEmpty()) {
-			final String[] cars = new String[] { "Audi A4", "BMW M3", "Chevrolet Corvette", "Fiat Panda",
-					"Ford Mustang", "Honda Civic", "Hyundai Genesis", "Kia Ceed", "Mazda 6", "Mercedes Benz",
+			final String[] models = new String[] { "Audi A4", "BMW M3", "Chevrolet Corvette", "Fiat Panda",
+					"Ford Mustang", "Honda Civic", "Hyundai Genesis", "Kia Ceed", "Mazda 6", "Mercedes SLK",
 					"Mitsubishi Lancer", "Nissan Note", "Opel Astra", "Peugeot 206", "Renault Clio", "Seat Ibiza",
 					"Skoda Octavia" };
+			final String[] cars = new String[] { "Audi", "BMW", "Chevrolet", "Fiat", "Ford", "Honda", "Hyundai", "Kia",
+					"Mazda", "Mercedes", "Mitsubishi", "Nissan", "Opel", "Peugeot", "Renault", "Seat", "Skoda" };
+
 			final String[] engines = new String[] { "Petrol 1.4", "Petrol 1.6", "Petrol 1.8", "Petrol 2.0",
 					"Petrol 3.2", "Diesel 1.7", "Diesel 1.9", "Diesel 2.0" };
 			final String[] parts = new String[] {};
@@ -184,6 +209,15 @@ public class CustomerService implements Cloneable {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
 				c.setType("car");
+				c.setName(split[0]);
+				c.setModel("");
+				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
+				save(c);
+			}
+			for (String name : models) {
+				String[] split = name.split(" ");
+				Customer c = new Customer();
+				c.setType("model");
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
