@@ -30,43 +30,14 @@ public class Customer implements Serializable, Cloneable {
 		this.id = id;
 	}
 
-	/**
-	 * Get the value of email
-	 *
-	 * @return the value of email
-	 */
-
-	/**
-	 * Set the value of email
-	 *
-	 * @param email
-	 *            new value of email
-	 */
-
-	/**
-	 * Get the value of status
-	 *
-	 * @return the value of status
-	 */
 	public CustomerStatus getStatus() {
 		return status;
 	}
 
-	/**
-	 * Set the value of status
-	 *
-	 * @param status
-	 *            new value of status
-	 */
 	public void setStatus(CustomerStatus status) {
 		this.status = status;
 	}
 
-	/**
-	 * Get the value of lastName
-	 *
-	 * @return the value of lastName
-	 */
 	public String getModel() {
 		return model;
 	}

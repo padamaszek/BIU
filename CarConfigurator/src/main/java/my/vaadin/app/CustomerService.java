@@ -19,12 +19,12 @@ import com.vaadin.ui.TreeTable;
  * In demos/tutorials/examples, get a reference to this service class with
  * {@link CustomerService#getInstance()}.
  */
-public class CustomerService {
+public class CustomerService implements Cloneable {
 
 	private static CustomerService instance;
 	private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
 
-	private final HashMap<Long, Customer> contacts = new HashMap<>();
+	private ArrayList<Customer> contacts = new ArrayList<>();
 	private long nextId = 0;
 
 	private CustomerService() {
@@ -58,7 +58,7 @@ public class CustomerService {
 	 */
 	public synchronized List<Customer> findAll(String stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
-		for (Customer contact : contacts.values()) {
+		for (Customer contact : contacts) {
 			try {
 				boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
 						|| contact.toString().toLowerCase().contains(stringFilter.toLowerCase());
@@ -78,7 +78,16 @@ public class CustomerService {
 		});
 		return arrayList;
 	}
-
+	public synchronized List<Customer> findAllItems(String stringFilter) 
+	 {
+	  ArrayList<Customer> arrayList = new ArrayList<>();
+	  for (Customer contact : contacts) 
+	  {
+	   if(contact.getType().equals(stringFilter))
+	    arrayList.add(contact);
+	  }
+	  return arrayList;
+	 }
 	/**
 	 * Finds all Customer's that match given filter and limits the resultset.
 	 *
@@ -93,7 +102,7 @@ public class CustomerService {
 	 */
 	public synchronized List<Customer> findAll(String stringFilter, int start, int maxresults) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
-		for (Customer contact : contacts.values()) {
+		for (Customer contact : contacts) {
 			try {
 				boolean passesFilter = (stringFilter == null || stringFilter.isEmpty())
 						|| contact.toString().toLowerCase().contains(stringFilter.toLowerCase());
@@ -155,9 +164,8 @@ public class CustomerService {
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}
-		contacts.put(entry.getId(), entry);
+		contacts.add(entry);
 	}
-
 	/**
 	 * Sample data generation
 	 */
@@ -169,6 +177,7 @@ public class CustomerService {
 					"Skoda Octavia" };
 			final String[] engines = new String[] { "Petrol 1.4", "Petrol 1.6", "Petrol 1.8", "Petrol 2.0",
 					"Petrol 3.2", "Diesel 1.7", "Diesel 1.9", "Diesel 2.0" };
+			final String[] parts = new String[] {};
 
 			Random r = new Random(0);
 			for (String name : cars) {
