@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
 
+import com.google.gwt.dom.client.Style.Clear;
 import com.vaadin.annotations.Theme;
 import com.vaadin.annotations.VaadinServletConfiguration;
 import com.vaadin.annotations.Widgetset;
@@ -121,6 +122,7 @@ public class MyUI extends UI {
 		// fetch list of Customers from service and assign it to Grid
 		List<Customer> customers = service.findAll(filterText.getValue());
 		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllItems("Car")));
+		CustomerService.car.clear();
 	}
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)

@@ -25,7 +25,7 @@ public class CustomerService implements Cloneable {
 	private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
 
 	private ArrayList<Customer> contacts = new ArrayList<>();
-	private ArrayList<Customer> car = new ArrayList<>();
+	static ArrayList<Customer> car = new ArrayList<>();
 	private long nextId = 0;
 
 	private CustomerService() {
@@ -92,7 +92,7 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> getModel(Customer stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		car.add(stringFilter);
-		if(stringFilter.getType().equals("Version")){
+		if(stringFilter.getType().equals("Engine")){
 			for (Customer contact : car) {
 				arrayList.add(contact);
 			}
@@ -106,18 +106,19 @@ public class CustomerService implements Cloneable {
 				}
 				break;
 			case "Model":
-				if (contact.getType().equals("Engine")) {
-					arrayList.add(contact);
-
-				}
-				break;
-				
-			case "Engine":
 				if (contact.getType().equals("Version")) {
 					arrayList.add(contact);
 
 				}
 				break;
+				
+			case "Version":
+				if (contact.getType().equals("Engine")) {
+					arrayList.add(contact);
+				}
+				break;
+			
+			
 			}
 		}
 
