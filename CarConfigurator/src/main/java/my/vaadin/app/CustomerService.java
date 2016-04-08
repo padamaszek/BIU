@@ -83,7 +83,7 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> findAllItems(String stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		for (Customer contact : contacts) {
-			if (contact.getType().equals(stringFilter))
+			if (contact.getStatus()== CustomerStatus.Car)
 				arrayList.add(contact);
 		}
 		return arrayList;
@@ -92,28 +92,28 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> getModel(Customer stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		car.add(stringFilter);
-		if (stringFilter.getType().equals("Engine")) {
+		if (stringFilter.getStatus() == CustomerStatus.Engine) {
 			for (Customer contact : car) {
 				arrayList.add(contact);
 			}
 		}
-
+		
 		for (Customer contact : contacts) {
-			switch (stringFilter.getType()) {
-			case "Car":
-				if (contact.getName().equals(stringFilter.getName()) && contact.getType().equals("Model")) {
+			switch (stringFilter.getStatus()) {
+			case Car:
+				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus()== CustomerStatus.Model) {
 					arrayList.add(contact);
 				}
 				break;
-			case "Model":
-				if (contact.getName().equals(stringFilter.getName()) && contact.getType().equals("Version")) {
+			case Model:
+				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus()==CustomerStatus.Version) {
 					arrayList.add(contact);
 
 				}
 				break;
 
-			case "Version":
-				if (contact.getType().equals("Engine")) {
+			case Version:
+				if (contact.getStatus() == CustomerStatus.Engine) {
 					arrayList.add(contact);
 				}
 				break;
@@ -226,37 +226,34 @@ public class CustomerService implements Cloneable {
 			for (String name : cars) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("Car");
 				c.setName(split[0]);
 				c.setModel("");
-				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
+				c.setStatus(CustomerStatus.Car);
 				save(c);
 			}
 			for (String name : models) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("Model");
 				c.setName(split[0]);
 				c.setModel(split[1]);
-				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
+				c.setStatus(CustomerStatus.Model);
 				save(c);
 			}
 			for (String name : engines) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("Engine");
 				c.setName(split[0]);
 				c.setModel(split[1]);
-				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
+				c.setStatus(CustomerStatus.Engine);
 				save(c);
 			}
 			for (String name : version) {
 				String[] split = name.split(" ");
 				Customer c = new Customer();
-				c.setType("Version");
 				c.setName(split[0]);
 				c.setModel(split[1]);
-				c.setStatus(CustomerStatus.values()[r.nextInt(CustomerStatus.values().length)]);
+				c.setStatus(CustomerStatus.Version);
+				
 				save(c);
 			}
 		}

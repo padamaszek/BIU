@@ -38,7 +38,7 @@ public class MyUI extends UI {
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 
-		Label label = new Label("WITAJ!");
+		Label label = new Label("WELCOME!");
 
 		filterText.setInputPrompt("filter by name...");
 		filterText.addTextChangeListener(e -> {
@@ -58,7 +58,7 @@ public class MyUI extends UI {
 		filtering.addComponents(filterText, clearFilterTextBtn);
 		filtering.setStyleName(ValoTheme.LAYOUT_COMPONENT_GROUP);
 
-		Button addCustomerBtn = new Button("Add new customer");
+		Button addCustomerBtn = new Button("Add new product");
 		addCustomerBtn.addClickListener(e -> {
 			grid.select(null);
 			form.setCustomer(new Customer());
@@ -100,7 +100,7 @@ public class MyUI extends UI {
 		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn);
 		toolbar.setSpacing(true);
 
-		grid.setColumns("name", "model", "type");
+		grid.setColumns("name", "model", "status");
 
 		HorizontalLayout main = new HorizontalLayout(grid, form);
 		main.setSpacing(true);

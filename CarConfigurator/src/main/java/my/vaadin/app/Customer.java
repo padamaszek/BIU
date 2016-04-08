@@ -18,8 +18,6 @@ public class Customer implements Serializable, Cloneable {
 
 	private Integer year;
 
-	private String type;
-
 	private CustomerStatus status;
 
 	public Long getId() {
@@ -50,14 +48,6 @@ public class Customer implements Serializable, Cloneable {
 	 */
 	public void setModel(String lastName) {
 		this.model = lastName;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public void setType(String type) {
-		this.type = type;
 	}
 
 	public Integer getYear() {
