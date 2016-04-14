@@ -23,10 +23,13 @@ public class CustomerService implements Cloneable {
 
 	private static CustomerService instance;
 	private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
-	
+
 	private ArrayList<Customer> contacts = new ArrayList<>();
 	static ArrayList<Customer> car = new ArrayList<>();
+	private CustomerStatus custStat;
+	private String name;
 	private long nextId = 0;
+	int i = 0;
 
 	private CustomerService() {
 	}
@@ -78,8 +81,9 @@ public class CustomerService implements Cloneable {
 			}
 		});
 		return arrayList;
-		
+
 	}
+
 	public synchronized List<Customer> findAllLogged() {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		for (Customer contact : contacts) {
@@ -91,11 +95,10 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> findAllItems(String stringFilter) {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		for (Customer contact : contacts) {
-			if (contact.getStatus()== CustomerStatus.Car)
+			if (contact.getStatus() == CustomerStatus.Car)
 				arrayList.add(contact);
 		}
-		
-		
+
 		return arrayList;
 	}
 
@@ -106,27 +109,85 @@ public class CustomerService implements Cloneable {
 		}
 		return arrayList;
 	}
-	
-	public synchronized List<Customer> getCar(Customer stringFilter) {
-		
+
+	// --------------------------------------------
+	public synchronized List<Customer> getBack() {
 		ArrayList<Customer> arrayList = new ArrayList<>();
-		
+		switch (custStat) {
+		case Engine:
+			for (Customer contact : contacts) {
+				if (contact.getStatus() == CustomerStatus.Engine) {
+					arrayList.add(contact);
+				}
+			}
+			custStat = CustomerStatus.Version;
+			car.remove(car.size()-1);
+			break;
+
+		case Version:
+			for (Customer contact : contacts) {
+				if (contact.getStatus() == CustomerStatus.Version && contact.getName().equals(name)) {
+					arrayList.add(contact);
+				}
+			}
+			custStat = CustomerStatus.Model;
+			car.remove(car.size()-1);
+			break;
+
+		case Model:
+			for (Customer contact : contacts) {
+				if (contact.getStatus() == CustomerStatus.Model && contact.getName().equals(name)) {
+					arrayList.add(contact);
+				}
+			}
+			custStat = CustomerStatus.Car;
+			car.remove(car.size()-1);
+			break;
+		case Car:
+			for (Customer contact : contacts) {
+				if (contact.getStatus() == CustomerStatus.Car) {
+					arrayList.add(contact);
+				}
+			}
+			i=0;
+			car.remove(car.size()-1);
+			break;
+		}
+
+		/*
+		 * else{ if (custStat == CustomerStatus.Version && contact.getStatus()
+		 * == CustomerStatus.Version && contact.getName().equals(name)) {
+		 * arrayList.add(contact); }
+		 * 
+		 * }
+		 */
+		return arrayList;
+	}
+
+	public synchronized List<Customer> getCar(Customer stringFilter) {
+		ArrayList<Customer> arrayList = new ArrayList<>();
+		if (i == 0) {
+			name = stringFilter.getName();
+			i++;
+		}
+		custStat = stringFilter.getStatus();
+
 		car.add(stringFilter);
 		if (stringFilter.getStatus() == CustomerStatus.Engine) {
 			for (Customer contact : car) {
 				arrayList.add(contact);
 			}
 		}
-		
+
 		for (Customer contact : contacts) {
 			switch (stringFilter.getStatus()) {
 			case Car:
-				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus()== CustomerStatus.Model) {
+				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus() == CustomerStatus.Model) {
 					arrayList.add(contact);
 				}
 				break;
 			case Model:
-				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus()==CustomerStatus.Version) {
+				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus() == CustomerStatus.Version) {
 					arrayList.add(contact);
 
 				}
@@ -138,8 +199,7 @@ public class CustomerService implements Cloneable {
 				}
 				break;
 			}
-			}
-		
+		}
 
 		return arrayList;
 	}
@@ -291,7 +351,7 @@ public class CustomerService implements Cloneable {
 				int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
 				cal.add(Calendar.DAY_OF_MONTH, daysOld);
 				c.setBirthDate(cal.getTime());
-				
+
 				save(c);
 			}
 		}

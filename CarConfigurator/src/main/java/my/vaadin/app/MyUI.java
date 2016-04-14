@@ -1,5 +1,6 @@
 package my.vaadin.app;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.annotation.WebServlet;
@@ -34,6 +35,7 @@ public class MyUI extends UI {
 	private TextField filterText = new TextField();
 	CustomerForm form = new CustomerForm(this);
 	static Boolean isLogged = false;
+	static ArrayList<Customer> car = new ArrayList<>();
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
@@ -66,6 +68,11 @@ public class MyUI extends UI {
 		});
 		addCustomerBtn.setVisible(false);
 
+		Button buttonBack = new Button("Back");
+		buttonBack.addClickListener(e -> {
+			showBack();
+		});
+		
 		Button startConfigure = new Button("Start Configuring Car");
 		startConfigure.setDescription("Clear the current filter");
 		startConfigure.addClickListener(e -> {
@@ -75,7 +82,7 @@ public class MyUI extends UI {
 			filterText.setVisible(true);
 			addCustomerBtn.setVisible(true);
 			clearFilterTextBtn.setVisible(true);
-
+			buttonBack.setVisible(true);
 			updateList();
 		});
 		//------------------------------------------
@@ -83,6 +90,8 @@ public class MyUI extends UI {
 		order.addClickListener(e -> {
 			showOrders();
 		});
+		
+		
 		
 				Button signIn = new Button("Sign In");
 				signIn.addClickListener(e -> {
@@ -112,9 +121,10 @@ public class MyUI extends UI {
 				
 				
 		
-		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn, order);
+		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn, order, buttonBack);
 		toolbar.setSpacing(true);
 		order.setVisible(false);
+		buttonBack.setVisible(false);
 
 		grid.setColumns("name", "model", "status");
 
@@ -162,13 +172,19 @@ public class MyUI extends UI {
 		}else{
 			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllLogged()));
 		}
-		CustomerService.car.clear();
+		car.clear();
 	}
 	public void showOrders(){
 		// fetch list of Customers from service and assign it to Grid
 				List<Customer> customers = service.findAll(filterText.getValue());
 				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getOrder()));
-				CustomerService.car.clear();
+				car.clear();
+	}
+	public void showBack(){
+		// fetch list of Customers from service and assign it to Grid
+		List<Customer> customers = service.findAll(filterText.getValue());
+		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getBack()));
+		car.clear();
 	}
 	
 
