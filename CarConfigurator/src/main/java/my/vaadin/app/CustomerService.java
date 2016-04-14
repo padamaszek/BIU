@@ -105,6 +105,7 @@ public class CustomerService implements Cloneable {
 	public synchronized List<Customer> getOrder() {
 		ArrayList<Customer> arrayList = new ArrayList<>();
 		for (Customer contact : car) {
+			System.out.println(contact.getName());
 			arrayList.add(contact);
 		}
 		return arrayList;

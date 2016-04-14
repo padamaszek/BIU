@@ -113,6 +113,7 @@ public class MyUI extends UI {
 						pwd.setVisible(false);
 						confirmButton.setVisible(false);
 						order.setVisible(true);
+						buttonBack.setVisible(false);
 						updateList();
 						}
 					});
