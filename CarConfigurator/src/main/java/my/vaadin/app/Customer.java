@@ -17,6 +17,16 @@ public class Customer implements Serializable, Cloneable {
 	private String model = "";
 
 	private Integer year;
+	
+	public Date getBirthDate() {
+		return birthDate;
+	}
+
+	public void setBirthDate(Date birthDate) {
+		this.birthDate = birthDate;
+	}
+
+	private Date birthDate;
 
 	private CustomerStatus status;
 

@@ -24,7 +24,7 @@ public class CustomerForm extends CustomerFormDesign {
 		// Show delete button for only customers already in the database
 		delete.setVisible(customer.isPersisted());
 		setVisible(true);
-		firstName.selectAll();
+		name.selectAll();
 	}
 
 	private void delete() {

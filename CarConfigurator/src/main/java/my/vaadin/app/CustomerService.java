@@ -23,7 +23,7 @@ public class CustomerService implements Cloneable {
 
 	private static CustomerService instance;
 	private static final Logger LOGGER = Logger.getLogger(CustomerService.class.getName());
-
+	
 	private ArrayList<Customer> contacts = new ArrayList<>();
 	static ArrayList<Customer> car = new ArrayList<>();
 	private long nextId = 0;
@@ -78,6 +78,14 @@ public class CustomerService implements Cloneable {
 			}
 		});
 		return arrayList;
+		
+	}
+	public synchronized List<Customer> findAllLogged() {
+		ArrayList<Customer> arrayList = new ArrayList<>();
+		for (Customer contact : contacts) {
+			arrayList.add(contact);
+		}
+		return arrayList;
 	}
 
 	public synchronized List<Customer> findAllItems(String stringFilter) {
@@ -86,11 +94,23 @@ public class CustomerService implements Cloneable {
 			if (contact.getStatus()== CustomerStatus.Car)
 				arrayList.add(contact);
 		}
+		
+		
 		return arrayList;
 	}
 
-	public synchronized List<Customer> getModel(Customer stringFilter) {
+	public synchronized List<Customer> getOrder() {
 		ArrayList<Customer> arrayList = new ArrayList<>();
+		for (Customer contact : car) {
+			arrayList.add(contact);
+		}
+		return arrayList;
+	}
+	
+	public synchronized List<Customer> getCar(Customer stringFilter) {
+		
+		ArrayList<Customer> arrayList = new ArrayList<>();
+		
 		car.add(stringFilter);
 		if (stringFilter.getStatus() == CustomerStatus.Engine) {
 			for (Customer contact : car) {
@@ -117,9 +137,9 @@ public class CustomerService implements Cloneable {
 					arrayList.add(contact);
 				}
 				break;
-
 			}
-		}
+			}
+		
 
 		return arrayList;
 	}
@@ -177,7 +197,7 @@ public class CustomerService implements Cloneable {
 	 *            the Customer to be deleted
 	 */
 	public synchronized void delete(Customer value) {
-		contacts.remove(value.getId());
+		contacts.remove(value);
 	}
 
 	/**
@@ -229,6 +249,11 @@ public class CustomerService implements Cloneable {
 				c.setName(split[0]);
 				c.setModel("");
 				c.setStatus(CustomerStatus.Car);
+				c.setYear(2016);
+				Calendar cal = Calendar.getInstance();
+				int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
+				cal.add(Calendar.DAY_OF_MONTH, daysOld);
+				c.setBirthDate(cal.getTime());
 				save(c);
 			}
 			for (String name : models) {
@@ -237,6 +262,11 @@ public class CustomerService implements Cloneable {
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.Model);
+				c.setYear(2016);
+				Calendar cal = Calendar.getInstance();
+				int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
+				cal.add(Calendar.DAY_OF_MONTH, daysOld);
+				c.setBirthDate(cal.getTime());
 				save(c);
 			}
 			for (String name : engines) {
@@ -245,6 +275,10 @@ public class CustomerService implements Cloneable {
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.Engine);
+				Calendar cal = Calendar.getInstance();
+				int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
+				cal.add(Calendar.DAY_OF_MONTH, daysOld);
+				c.setBirthDate(cal.getTime());
 				save(c);
 			}
 			for (String name : version) {
@@ -253,6 +287,10 @@ public class CustomerService implements Cloneable {
 				c.setName(split[0]);
 				c.setModel(split[1]);
 				c.setStatus(CustomerStatus.Version);
+				Calendar cal = Calendar.getInstance();
+				int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
+				cal.add(Calendar.DAY_OF_MONTH, daysOld);
+				c.setBirthDate(cal.getTime());
 				
 				save(c);
 			}

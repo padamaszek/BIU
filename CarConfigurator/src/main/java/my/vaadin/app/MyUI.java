@@ -33,6 +33,7 @@ public class MyUI extends UI {
 	private Grid grid = new Grid();
 	private TextField filterText = new TextField();
 	CustomerForm form = new CustomerForm(this);
+	static Boolean isLogged = false;
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
@@ -68,6 +69,7 @@ public class MyUI extends UI {
 		Button startConfigure = new Button("Start Configuring Car");
 		startConfigure.setDescription("Clear the current filter");
 		startConfigure.addClickListener(e -> {
+			isLogged = false;
 			filterText.clear();
 			grid.setVisible(true);
 			filterText.setVisible(true);
@@ -76,7 +78,12 @@ public class MyUI extends UI {
 
 			updateList();
 		});
-
+		//------------------------------------------
+		Button order = new Button("Orders");
+		order.addClickListener(e -> {
+			showOrders();
+		});
+		
 				Button signIn = new Button("Sign In");
 				signIn.addClickListener(e -> {
 					label.setValue("Sign In");
@@ -90,15 +97,24 @@ public class MyUI extends UI {
 
 						if(login.getValue().equals("admin") && pwd.getValue().equals("admin")){
 							label.setValue("Logged Sucessfully");
-						
+							grid.setVisible(true);
+						form.setVisible(true);
+						isLogged = true;
+						login.setVisible(false);
+						pwd.setVisible(false);
+						confirmButton.setVisible(false);
+						order.setVisible(true);
+						updateList();
 						}
 					});
 					layout.addComponent(confirmButton);
 				});
-
+				
+				
 		
-		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn);
+		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn, order);
 		toolbar.setSpacing(true);
+		order.setVisible(false);
 
 		grid.setColumns("name", "model", "status");
 
@@ -126,10 +142,14 @@ public class MyUI extends UI {
 				form.setVisible(false);
 
 			} else {
+				
 				Customer customer = (Customer) event.getSelected().iterator().next();
 				form.setCustomer(customer);	
-				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getModel(customer)));
-			}
+				
+				if(!isLogged){
+				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getCar(customer)));
+			}}
+			
 		});
 
 	}
@@ -137,9 +157,20 @@ public class MyUI extends UI {
 	public void updateList() {
 		// fetch list of Customers from service and assign it to Grid
 		List<Customer> customers = service.findAll(filterText.getValue());
+		if(!isLogged){
 		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllItems("Car")));
+		}else{
+			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllLogged()));
+		}
 		CustomerService.car.clear();
 	}
+	public void showOrders(){
+		// fetch list of Customers from service and assign it to Grid
+				List<Customer> customers = service.findAll(filterText.getValue());
+				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getOrder()));
+				CustomerService.car.clear();
+	}
+	
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
 	@VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
