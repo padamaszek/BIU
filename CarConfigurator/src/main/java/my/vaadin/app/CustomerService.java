@@ -113,6 +113,7 @@ public class CustomerService implements Cloneable {
 	// --------------------------------------------
 	public synchronized List<Customer> getBack() {
 		ArrayList<Customer> arrayList = new ArrayList<>();
+		if(custStat != null){
 		switch (custStat) {
 		case Engine:
 			for (Customer contact : contacts) {
@@ -121,7 +122,7 @@ public class CustomerService implements Cloneable {
 				}
 			}
 			custStat = CustomerStatus.Version;
-			car.remove(car.size()-1);
+			car.remove(car.size() - 1);
 			break;
 
 		case Version:
@@ -131,7 +132,7 @@ public class CustomerService implements Cloneable {
 				}
 			}
 			custStat = CustomerStatus.Model;
-			car.remove(car.size()-1);
+			car.remove(car.size() - 1);
 			break;
 
 		case Model:
@@ -141,7 +142,7 @@ public class CustomerService implements Cloneable {
 				}
 			}
 			custStat = CustomerStatus.Car;
-			car.remove(car.size()-1);
+			car.remove(car.size() - 1);
 			break;
 		case Car:
 			for (Customer contact : contacts) {
@@ -149,18 +150,17 @@ public class CustomerService implements Cloneable {
 					arrayList.add(contact);
 				}
 			}
-			i=0;
-			car.remove(car.size()-1);
+			i = 0;
+			custStat=null;
+			car.remove(car.size() - 1);
 			break;
+		}}else{
+			for (Customer contact : contacts) {
+				if (contact.getStatus() == CustomerStatus.Car) {
+					arrayList.add(contact);
+				}
+			}
 		}
-
-		/*
-		 * else{ if (custStat == CustomerStatus.Version && contact.getStatus()
-		 * == CustomerStatus.Version && contact.getName().equals(name)) {
-		 * arrayList.add(contact); }
-		 * 
-		 * }
-		 */
 		return arrayList;
 	}
 
