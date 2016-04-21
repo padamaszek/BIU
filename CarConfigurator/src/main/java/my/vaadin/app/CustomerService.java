@@ -10,6 +10,7 @@ import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.vaadin.data.validator.StringLengthValidator;
 import com.vaadin.ui.TreeTable;
 
 /**
@@ -98,7 +99,7 @@ public class CustomerService implements Cloneable {
 			if (contact.getStatus() == CustomerStatus.Car)
 				arrayList.add(contact);
 		}
-
+		MyUI.label.setValue("Car Configurator");
 		return arrayList;
 	}
 
@@ -114,53 +115,59 @@ public class CustomerService implements Cloneable {
 	// --------------------------------------------
 	public synchronized List<Customer> getBack() {
 		ArrayList<Customer> arrayList = new ArrayList<>();
-		if(custStat != null){
-		switch (custStat) {
-		case Engine:
-			for (Customer contact : contacts) {
-				if (contact.getStatus() == CustomerStatus.Engine) {
-					arrayList.add(contact);
+		if (custStat != null) {
+			switch (custStat) {
+			case Engine:
+				for (Customer contact : contacts) {
+					if (contact.getStatus() == CustomerStatus.Engine) {
+						arrayList.add(contact);
+					}
 				}
-			}
-			custStat = CustomerStatus.Version;
-			car.remove(car.size() - 1);
-			break;
+				custStat = CustomerStatus.Version;
+				car.remove(car.size() - 1);
+				MyUI.label.setValue("Select Engine:");
+				break;
 
-		case Version:
-			for (Customer contact : contacts) {
-				if (contact.getStatus() == CustomerStatus.Version && contact.getName().equals(name)) {
-					arrayList.add(contact);
+			case Version:
+				for (Customer contact : contacts) {
+					if (contact.getStatus() == CustomerStatus.Version && contact.getName().equals(name)) {
+						arrayList.add(contact);
+					}
 				}
-			}
-			custStat = CustomerStatus.Model;
-			car.remove(car.size() - 1);
-			break;
+				custStat = CustomerStatus.Model;
+				car.remove(car.size() - 1);
+				MyUI.label.setValue("Select Version:");
+				break;
 
-		case Model:
-			for (Customer contact : contacts) {
-				if (contact.getStatus() == CustomerStatus.Model && contact.getName().equals(name)) {
-					arrayList.add(contact);
+			case Model:
+				for (Customer contact : contacts) {
+					if (contact.getStatus() == CustomerStatus.Model && contact.getName().equals(name)) {
+						arrayList.add(contact);
+					}
 				}
+				custStat = CustomerStatus.Car;
+				car.remove(car.size() - 1);
+				MyUI.label.setValue("Select Model:");
+				break;
+			case Car:
+				for (Customer contact : contacts) {
+					if (contact.getStatus() == CustomerStatus.Car) {
+						arrayList.add(contact);
+					}
+				}
+				i = 0;
+				custStat = null;
+				car.remove(car.size() - 1);
+				MyUI.label.setValue("Select Car:");
+				break;
 			}
-			custStat = CustomerStatus.Car;
-			car.remove(car.size() - 1);
-			break;
-		case Car:
+		} else {
 			for (Customer contact : contacts) {
 				if (contact.getStatus() == CustomerStatus.Car) {
 					arrayList.add(contact);
 				}
 			}
-			i = 0;
-			custStat=null;
-			car.remove(car.size() - 1);
-			break;
-		}}else{
-			for (Customer contact : contacts) {
-				if (contact.getStatus() == CustomerStatus.Car) {
-					arrayList.add(contact);
-				}
-			}
+			MyUI.label.setValue("Select Car:");
 		}
 		return arrayList;
 	}
@@ -178,6 +185,7 @@ public class CustomerService implements Cloneable {
 			for (Customer contact : car) {
 				arrayList.add(contact);
 			}
+			MyUI.label.setValue("Your Order:");
 		}
 
 		for (Customer contact : contacts) {
@@ -186,18 +194,21 @@ public class CustomerService implements Cloneable {
 				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus() == CustomerStatus.Model) {
 					arrayList.add(contact);
 				}
+				MyUI.label.setValue("Select Model:");
 				break;
 			case Model:
 				if (contact.getName().equals(stringFilter.getName()) && contact.getStatus() == CustomerStatus.Version) {
 					arrayList.add(contact);
 
 				}
+				MyUI.label.setValue("Select Version:");
 				break;
 
 			case Version:
 				if (contact.getStatus() == CustomerStatus.Engine) {
 					arrayList.add(contact);
 				}
+				MyUI.label.setValue("Select Engine:");
 				break;
 			}
 		}
@@ -277,7 +288,11 @@ public class CustomerService implements Cloneable {
 			entry.setId(nextId++);
 		}
 		try {
-			entry = (Customer) entry.clone();
+			
+				entry = (Customer) entry.clone();
+				
+			
+
 		} catch (Exception ex) {
 			throw new RuntimeException(ex);
 		}

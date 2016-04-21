@@ -3,6 +3,13 @@ package my.vaadin.app;
 import java.io.Serializable;
 import java.util.Date;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.Min;
+import javax.validation.constraints.NotNull;
+
+
+import com.vaadin.data.fieldgroup.PropertyId;
+
 /**
  * A entity object, like in any other Java application. In a typical real world
  * application this could for example be a JPA entity.
@@ -16,8 +23,12 @@ public class Customer implements Serializable, Cloneable {
 
 	private String model = "";
 
+    @Min(1000)
+    @Max(10000)
+    @NotNull(message="Please enter a valid email address.")
+    @PropertyId("year")
 	private Integer year;
-	
+
 	public Date getBirthDate() {
 		return birthDate;
 	}
@@ -65,7 +76,12 @@ public class Customer implements Serializable, Cloneable {
 	}
 
 	public void setYear(Integer year) {
-		this.year = year;
+		if (year < 1000) {
+			MyUI.label.setValue("WRONG DATA!!!");
+			
+		}else{
+			this.year = year;
+		}
 	}
 
 	/**

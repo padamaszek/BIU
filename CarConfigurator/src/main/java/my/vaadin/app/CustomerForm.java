@@ -1,7 +1,10 @@
 package my.vaadin.app;
 
 import com.vaadin.data.fieldgroup.BeanFieldGroup;
+import com.vaadin.data.util.BeanItem;
+import com.vaadin.data.validator.BeanValidator;
 import com.vaadin.event.ShortcutAction.KeyCode;
+import com.vaadin.ui.TextField;
 
 public class CustomerForm extends CustomerFormDesign {
 
@@ -19,8 +22,14 @@ public class CustomerForm extends CustomerFormDesign {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-		BeanFieldGroup.bindFieldsUnbuffered(customer, this);
-
+        		BeanFieldGroup.bindFieldsBuffered(customer, this);
+        		 //year.addValidator(new BeanValidator(Customer.class, "year"));
+        		 //year.setImmediate(true);
+        //BeanFieldGroup<Customer> x = new BeanFieldGroup<Customer>(Customer.class);
+        //x.setItemDataSource(customer);
+        //x.buildAndBind("Year","year");
+        
+		//BeanFieldGroup.bindFieldsUnbuffered(customer, this.year).buildAndBind("Year", "year").setBuffered(true);
 		// Show delete button for only customers already in the database
 		delete.setVisible(customer.isPersisted());
 		setVisible(true);
@@ -36,6 +45,7 @@ public class CustomerForm extends CustomerFormDesign {
 	private void save() {
 		service.save(customer);
 		myUI.updateList();
-		setVisible(false);
-	}
+		setVisible(true);
+		}
+	
 }

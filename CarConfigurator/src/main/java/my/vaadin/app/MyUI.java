@@ -36,14 +36,13 @@ public class MyUI extends UI {
 	CustomerForm form = new CustomerForm(this);
 	static Boolean isLogged = false;
 	static ArrayList<Customer> car = new ArrayList<>();
+	static Label label = new Label("WELCOME!");
 
 	@Override
 	protected void init(VaadinRequest vaadinRequest) {
 		final VerticalLayout layout = new VerticalLayout();
 
-		Label label = new Label("WELCOME!");
-
-		filterText.setInputPrompt("filter by name...");
+		filterText.setInputPrompt("filter by Car...");
 		filterText.addTextChangeListener(e -> {
 			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAll(e.getText())));
 		});
@@ -72,60 +71,64 @@ public class MyUI extends UI {
 		buttonBack.addClickListener(e -> {
 			showBack();
 		});
-		
+
 		Button startConfigure = new Button("Start Configuring Car");
 		startConfigure.setDescription("Clear the current filter");
 		startConfigure.addClickListener(e -> {
+			label.setValue("Configure Car");
 			isLogged = false;
 			filterText.clear();
 			grid.setVisible(true);
 			filterText.setVisible(true);
-			addCustomerBtn.setVisible(true);
-			clearFilterTextBtn.setVisible(true);
+			clearFilterTextBtn.setVisible(false);
 			buttonBack.setVisible(true);
+			startConfigure.setVisible(false);
+			form.setVisible(false);
 			updateList();
 		});
-		//------------------------------------------
+		// ------------------------------------------
 		Button order = new Button("Orders");
 		order.addClickListener(e -> {
+			label.setValue("ORDERS");
 			showOrders();
 		});
-		
-		
-		
-				Button signIn = new Button("Sign In");
-				signIn.addClickListener(e -> {
-					label.setValue("Sign In");
-					signIn.setVisible(false);
-					TextField login = new TextField();
-					TextField pwd = new TextField();
-					layout.addComponents(login, pwd);
-					startConfigure.setVisible(false);
-					Button confirmButton = new Button("Confirm");
-					confirmButton.addClickListener(a -> {
 
-						if(login.getValue().equals("admin") && pwd.getValue().equals("admin")){
-							label.setValue("Logged Sucessfully");
-							grid.setVisible(true);
-						form.setVisible(true);
-						isLogged = true;
-						login.setVisible(false);
-						pwd.setVisible(false);
-						confirmButton.setVisible(false);
-						order.setVisible(true);
-						buttonBack.setVisible(false);
-						updateList();
-						}
-					});
-					layout.addComponent(confirmButton);
-				});
-				
-				
-		
-		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn, order, buttonBack);
+		Button signIn = new Button("Sign In");
+		signIn.addClickListener(e -> {
+			label.setValue("Sign In");
+			signIn.setVisible(false);
+			TextField login = new TextField();
+			TextField pwd = new TextField();
+			layout.addComponents(login, pwd);
+			startConfigure.setVisible(false);
+			Button confirmButton = new Button("Confirm");
+			confirmButton.addClickListener(a -> {
+
+				if (login.getValue().equals("admin") && pwd.getValue().equals("admin")) {
+					label.setValue("Logged Sucessfully");
+					grid.setVisible(true);
+					form.setVisible(true);
+					isLogged = true;
+					login.setVisible(false);
+					pwd.setVisible(false);
+					confirmButton.setVisible(false);
+					order.setVisible(true);
+					buttonBack.setVisible(false);
+					addCustomerBtn.setVisible(true);
+					clearFilterTextBtn.setVisible(true);
+					updateList();
+				}
+			});
+			layout.addComponent(confirmButton);
+		});
+
+		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn, order,
+				buttonBack);
 		toolbar.setSpacing(true);
 		order.setVisible(false);
 		buttonBack.setVisible(false);
+		addCustomerBtn.setVisible(false);
+		clearFilterTextBtn.setVisible(false);
 
 		grid.setColumns("name", "model", "status");
 
@@ -142,25 +145,27 @@ public class MyUI extends UI {
 		layout.setMargin(true);
 		layout.setSpacing(true);
 		setContent(layout);
-
-		form.setVisible(false);
-
+if(isLogged){
+		form.setVisible(true);
+}else{
+	form.setVisible(false);
+}
 		grid.setVisible(false);
 
-		
 		grid.addSelectionListener(event -> {
 			if (event.getSelected().isEmpty()) {
-				form.setVisible(false);
+				form.setVisible(true);
 
 			} else {
-				
+
 				Customer customer = (Customer) event.getSelected().iterator().next();
-				form.setCustomer(customer);	
-				
-				if(!isLogged){
-				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getCar(customer)));
-			}}
-			
+				form.setCustomer(customer);
+
+				if (!isLogged) {
+					grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getCar(customer)));
+				}
+			}
+
 		});
 
 	}
@@ -168,26 +173,27 @@ public class MyUI extends UI {
 	public void updateList() {
 		// fetch list of Customers from service and assign it to Grid
 		List<Customer> customers = service.findAll(filterText.getValue());
-		if(!isLogged){
-		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllItems("Car")));
-		}else{
+		if (!isLogged) {
+			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllItems("Car")));
+		} else {
 			grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.findAllLogged()));
 		}
 		car.clear();
 	}
-	public void showOrders(){
+
+	public void showOrders() {
 		// fetch list of Customers from service and assign it to Grid
-				List<Customer> customers = service.findAll(filterText.getValue());
-				grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getOrder()));
-				car.clear();
+		List<Customer> customers = service.findAll(filterText.getValue());
+		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getOrder()));
+		car.clear();
 	}
-	public void showBack(){
+
+	public void showBack() {
 		// fetch list of Customers from service and assign it to Grid
 		List<Customer> customers = service.findAll(filterText.getValue());
 		grid.setContainerDataSource(new BeanItemContainer<>(Customer.class, service.getBack()));
 		car.clear();
 	}
-	
 
 	@WebServlet(urlPatterns = "/*", name = "MyUIServlet", asyncSupported = true)
 	@VaadinServletConfiguration(ui = MyUI.class, productionMode = false)
