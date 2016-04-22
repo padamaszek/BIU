@@ -325,7 +325,8 @@ public class CustomerService implements Cloneable {
 				c.setName(split[0]);
 				c.setModel("");
 				c.setStatus(CustomerStatus.Car);
-				c.setYear(2016);
+				
+				c.setYear(r.nextInt(2016 - 1900 + 1) + 1900);
 				Calendar cal = Calendar.getInstance();
 				int daysOld = 0 - r.nextInt(365 * 15 + 365 * 60);
 				cal.add(Calendar.DAY_OF_MONTH, daysOld);

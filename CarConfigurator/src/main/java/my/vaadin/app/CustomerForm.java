@@ -18,13 +18,14 @@ public class CustomerForm extends CustomerFormDesign {
 		save.setClickShortcut(KeyCode.ENTER);
 		save.addClickListener(e -> this.save());
 		delete.addClickListener(e -> this.delete());
+		
 	}
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
 		final BeanFieldGroup<Customer> binder = BeanFieldGroup.bindFieldsUnbuffered(customer, this);
-		
 		year.addValidator(new BeanValidator(Customer.class, "year"));
+		
 		
 		/*final BeanFieldGroup<Customer> binder =
 		        new BeanFieldGroup<Customer>(Customer.class);

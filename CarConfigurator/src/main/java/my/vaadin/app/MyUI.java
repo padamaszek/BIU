@@ -95,6 +95,15 @@ public class MyUI extends UI {
 
 		Button signIn = new Button("Sign In");
 		signIn.addClickListener(e -> {
+			if (isLogged) {
+				
+				grid.setVisible(true);
+				form.setVisible(true);
+				updateList();
+				
+			} else {
+				
+			
 			label.setValue("Sign In");
 			signIn.setVisible(false);
 			TextField login = new TextField();
@@ -118,8 +127,10 @@ public class MyUI extends UI {
 					clearFilterTextBtn.setVisible(true);
 					updateList();
 				}
+			
 			});
 			layout.addComponent(confirmButton);
+			}
 		});
 
 		HorizontalLayout toolbar = new HorizontalLayout(filtering, addCustomerBtn, startConfigure, signIn, order,
@@ -145,11 +156,9 @@ public class MyUI extends UI {
 		layout.setMargin(true);
 		layout.setSpacing(true);
 		setContent(layout);
-if(isLogged){
-		form.setVisible(true);
-}else{
-	form.setVisible(false);
-}
+		
+			form.setVisible(false);
+		
 		grid.setVisible(false);
 
 		grid.addSelectionListener(event -> {

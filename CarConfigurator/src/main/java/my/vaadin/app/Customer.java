@@ -23,25 +23,12 @@ public class Customer implements Serializable, Cloneable {
 
 	private String model = "";
 
-    @Min(1000)
-    @Max(10000)
-    @NotNull(message="Please enter a valid email address.")
+    @Min(1900)
+    @Max(2016)
+    @NotNull(message="Please enter a valid year")
     @PropertyId("year")
 	private Integer year;
 
-    @Min(1000)
-    @Max(10000)
-    @NotNull(message="Please enter a valid email address.")
-    @PropertyId("year2")
-    private Integer year2;
-    public Integer getYear2() {
-		return year;
-	}
-
-	public void setYear2(Integer year) {
-			this.year = year;
-		}
-	
     
 	public Date getBirthDate() {
 		return birthDate;
