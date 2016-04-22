@@ -22,14 +22,29 @@ public class CustomerForm extends CustomerFormDesign {
 
 	public void setCustomer(Customer customer) {
 		this.customer = customer;
-        		BeanFieldGroup.bindFieldsBuffered(customer, this);
-        		 //year.addValidator(new BeanValidator(Customer.class, "year"));
-        		 //year.setImmediate(true);
-        //BeanFieldGroup<Customer> x = new BeanFieldGroup<Customer>(Customer.class);
-        //x.setItemDataSource(customer);
-        //x.buildAndBind("Year","year");
+		final BeanFieldGroup<Customer> binder = BeanFieldGroup.bindFieldsUnbuffered(customer, this);
+		
+		year.addValidator(new BeanValidator(Customer.class, "year"));
+		
+		/*final BeanFieldGroup<Customer> binder =
+		        new BeanFieldGroup<Customer>(Customer.class);
+		binder.setItemDataSource(customer);
+		binder.buildAndBind("First", "name");
+		binder.buildAndBind("Year", "year");
+		binder.setBuffered(true);*/
+		
+		//BeanItem<Customer> item = new BeanItem<Customer> (customer);
+		//year("Year",item.getItemProperty("year"));
+		
+		//binder.setBuffered(true);
+       //		 year.addValidator(new BeanValidator(Customer.class, "year"));
+        //		 year.setImmediate(true);
+        	//	 addComponent(year);
+       // x.setItemDataSource(customer);
+       // x.buildAndBind("Year","year");
         
 		//BeanFieldGroup.bindFieldsUnbuffered(customer, this.year).buildAndBind("Year", "year").setBuffered(true);
+        		
 		// Show delete button for only customers already in the database
 		delete.setVisible(customer.isPersisted());
 		setVisible(true);
